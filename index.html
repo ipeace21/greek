@@ -181,50 +181,54 @@ const greekLetters = [
 ];
 
 let running = false;
-let timer1, timer2;
-let shuffledLetters = [];
-let currentIndex = 0;
+let timers = [];
+let shuffled = [];
+let index = 0;
 
-function shuffleArray(arr) {
-    return [...arr].sort(() => Math.random() - 0.5);
+/* Fisher–Yates Shuffle */
+function shuffleLetters() {
+    shuffled = [...greekLetters];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    index = 0;
 }
 
 function cycle() {
     if (!running) return;
 
-    const speed = +speedSelect.value;
+    const speed = parseInt(speedSelect.value);
 
-    if (currentIndex >= shuffledLetters.length) {
-        shuffledLetters = shuffleArray(greekLetters);
-        currentIndex = 0;
+    if (index >= shuffled.length) {
+        shuffleLetters();   // 한 바퀴 끝 → 다시 랜덤
     }
 
-    const g = shuffledLetters[currentIndex++];
+    const g = shuffled[index++];
 
     letter.textContent = `${g.upper} ${g.lower}`;
     name.style.visibility = pron.style.visibility = "hidden";
 
-    timer1 = setTimeout(() => {
+    timers.push(setTimeout(() => {
         name.textContent = `${g.name} (${g.latin})`;
         pron.textContent = `[${g.pron}]`;
         name.style.visibility = pron.style.visibility = "visible";
-    }, speed);
+    }, speed));
 
-    timer2 = setTimeout(cycle, speed * 2);
+    timers.push(setTimeout(cycle, speed * 2));
 }
 
 function start() {
-    stop();
-    shuffledLetters = shuffleArray(greekLetters);
-    currentIndex = 0;
+    stop();                // ← 항상 완전 초기화
+    shuffleLetters();
     running = true;
     cycle();
 }
 
 function stop() {
     running = false;
-    clearTimeout(timer1);
-    clearTimeout(timer2);
+    timers.forEach(t => clearTimeout(t));
+    timers = [];
 }
 
 /* 알파벳 보기 */
