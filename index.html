@@ -23,7 +23,7 @@
 
     .card {
         background: white;
-        padding: 28px 22px;
+        padding: 20px 22px;
         border-radius: 16px;
         box-shadow: 0 10px 25px rgba(0,0,0,0.15);
         text-align: center;
@@ -43,7 +43,7 @@
     .info {
         margin-top: 10px;
         line-height: 1.6;
-        min-height: 64px;   /* 이름 + 발음 2줄 기준 */
+        min-height: 74px;   /* 이름 + 발음 2줄 기준 */
     }
 
     .name {
@@ -153,14 +153,35 @@ const greekLetters = [
 let running = false;
 let timer1, timer2;
 
+let shuffledLetters = [];
+let currentIndex = 0;
+
+/* 배열 섞기 (Fisher–Yates Shuffle) */
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
 function cycle() {
     if (!running) return;
 
     const speed = parseInt(document.getElementById("speedSelect").value);
-    const random = greekLetters[Math.floor(Math.random() * greekLetters.length)];
+
+    // 한 바퀴가 끝났으면 다시 섞기
+    if (currentIndex >= shuffledLetters.length) {
+        shuffledLetters = shuffleArray(greekLetters);
+        currentIndex = 0;
+    }
+
+    const current = shuffledLetters[currentIndex];
+    currentIndex++;
 
     document.getElementById("letter").textContent =
-        `${random.upper} ${random.lower}`;
+        `${current.upper} ${current.lower}`;
 
     // 숨김
     document.getElementById("name").style.visibility = "hidden";
@@ -168,9 +189,9 @@ function cycle() {
 
     timer1 = setTimeout(() => {
         document.getElementById("name").textContent =
-            `${random.name} (${random.latin})`;
+            `${current.name} (${current.latin})`;
         document.getElementById("pron").textContent =
-            `[${random.pron}]`;
+            `[${current.pron}]`;
 
         document.getElementById("name").style.visibility = "visible";
         document.getElementById("pron").style.visibility = "visible";
@@ -181,6 +202,8 @@ function cycle() {
 
 function start() {
     stop();
+    shuffledLetters = shuffleArray(greekLetters); // 시작 시 한 번 섞기
+    currentIndex = 0;
     running = true;
     cycle();
 }
