@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:wght@400;700&display=swap" rel="stylesheet">
+
+<title>헬라어 알파벳 전체 보기</title>
+
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f5f6fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 16px;
+    }
+
+    .card {
+        background: white;
+        padding: 20px 22px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        width: 100%;
+        max-width: 420px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    h1 {
+        text-align: center;
+        color: green;
+        margin-bottom: 12px;
+    }
+
+    .alphabet-list {
+        font-family: 'Gentium Plus', serif;
+        font-size: 18px;
+        line-height: 1.7;
+        overflow-y: auto;
+        max-height: 65vh;
+        padding-right: 6px;
+    }
+
+    .alphabet-list div {
+        padding: 6px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .back-btn {
+        margin-top: 16px;
+        padding: 12px;
+        font-size: 16px;
+        background: #3867d6;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h1>헬라어 알파벳 전체 보기</h1>
+
+    <div class="alphabet-list">
+        <div>Α - α  :  알파 (alpha) [a (아)]</div>
+        <div>Β - β  :  베타 (beta) [b (ㅂ)]</div>
+        <div>Γ - γ  :  감마 (gamma) [g (ㄱ)]</div>
+        <div>Δ - δ  :  델타 (delta) [d (ㄷ)]</div>
+        <div>Ε - ε  :  엡실론 (epsilon) [e (에)]</div>
+        <div>Ζ - ζ  :  제타 (zeta) [z (ㅈ)]</div>
+        <div>Η - η  :  에타 (eta) [ē (에)]</div>
+        <div>Θ - θ  :  쎄타 (theta) [th (ㄸ/ㅆ)]</div>
+        <div>Ι - ι  :  이오타 (iota) [i (이)]</div>
+        <div>Κ - κ  :  카파 (kappa) [k (ㅋ)]</div>
+        <div>Λ - λ  :  람다 (lambda) [l (ㄹ)]</div>
+        <div>Μ - μ  :  뮈 (mu) [m (ㅁ)]</div>
+        <div>Ν - ν  :  뉘 (nu) [n (ㄴ)]</div>
+        <div>Ξ - ξ  :  크시 (xi) [x (크스)]</div>
+        <div>Ο - ο  :  오미크론 (omicron) [o (오)]</div>
+        <div>Π - π  :  피 (pi) [p (ㅍ)]</div>
+        <div>Ρ - ρ  :  로 (rho) [r (ㄹ)]</div>
+        <div>Σ - σ  :  시그마 (sigma) [s (ㅅ)]</div>
+        <div>Τ - τ  :  타우 (tau) [t (ㅌ)]</div>
+        <div>Υ - υ  :  윕실론 (upsilon) [u (위)]</div>
+        <div>Φ - φ  :  피 (phi) [ph (ㅍ)]</div>
+        <div>Χ - χ  :  키 (chi) [ch (ㅋ)]</div>
+        <div>Ψ - ψ  :  프시 (psi) [ps (프스)]</div>
+        <div>Ω - ω  :  오메가 (omega) [ō (오)]</div>
+    </div>
+
+    <button class="back-btn" onclick="location.href='index.html'">
+        돌아가기
+    </button>
+</div>
+
+</body>
+</html>
