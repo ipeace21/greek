@@ -180,55 +180,56 @@ const greekLetters = [
     { upper:"Ω", lower:"ω", name:"오메가", latin:"omega", pron:"ō (오)" }
 ];
 
-let running = false;
-let timers = [];
-let shuffled = [];
+let intervalId = null;
+let showInfo = false;
+let order = [];
 let index = 0;
 
-/* Fisher–Yates Shuffle */
-function shuffleLetters() {
-    shuffled = [...greekLetters];
-    for (let i = shuffled.length - 1; i > 0; i--) {
+/* 배열 섞기 */
+function shuffle() {
+    order = [...greekLetters];
+    for (let i = order.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        [order[i], order[j]] = [order[j], order[i]];
     }
     index = 0;
 }
 
-function cycle() {
-    if (!running) return;
+/* 한 단계 실행 */
+function step() {
+    const speed = +speedSelect.value;
 
-    const speed = parseInt(speedSelect.value);
+    if (!showInfo) {
+        if (index >= order.length) shuffle();
 
-    if (index >= shuffled.length) {
-        shuffleLetters();   // 한 바퀴 끝 → 다시 랜덤
+        const g = order[index++];
+        letter.textContent = `${g.upper} ${g.lower}`;
+        name.style.visibility = pron.style.visibility = "hidden";
+
+        step.current = g;
+    } else {
+        name.textContent = `${step.current.name} (${step.current.latin})`;
+        pron.textContent = `[${step.current.pron}]`;
+        name.style.visibility = pron.style.visibility = "visible";
     }
 
-    const g = shuffled[index++];
-
-    letter.textContent = `${g.upper} ${g.lower}`;
-    name.style.visibility = pron.style.visibility = "hidden";
-
-    timers.push(setTimeout(() => {
-        name.textContent = `${g.name} (${g.latin})`;
-        pron.textContent = `[${g.pron}]`;
-        name.style.visibility = pron.style.visibility = "visible";
-    }, speed));
-
-    timers.push(setTimeout(cycle, speed * 2));
+    showInfo = !showInfo;
 }
 
+/* 시작 */
 function start() {
-    stop();                // ← 항상 완전 초기화
-    shuffleLetters();
-    running = true;
-    cycle();
+    stop();
+    shuffle();
+    showInfo = false;
+    step(); // 즉시 1회 실행
+
+    intervalId = setInterval(step, +speedSelect.value);
 }
 
+/* 중지 */
 function stop() {
-    running = false;
-    timers.forEach(t => clearTimeout(t));
-    timers = [];
+    clearInterval(intervalId);
+    intervalId = null;
 }
 
 /* 알파벳 보기 */
@@ -247,6 +248,7 @@ function backToMain() {
     mainPage.style.display = "block";
 }
 </script>
+
 
 </body>
 </html>
