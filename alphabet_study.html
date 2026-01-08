@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:wght@400;700&display=swap" rel="stylesheet">
+  <title>헬라어 공부</title>
+  
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f6fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 16px;
+    }
+    
+    .card {
+      background: white;
+      padding: 20px 22px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15); text-align: center;
+      width: 100%;
+      max-width: 380px;
+    }
+    
+    .letter {
+      font-family: 'Gentium Plus', 'Times New Roman', serif;
+      font-size: clamp(56px, 12vw, 92px);
+      font-weight: 700; margin-bottom: 12px;
+    }
+    
+    /* ⭐ 고정 높이 영역 */
+    .info {
+      margin-top: 10px;
+      line-height: 1.6;
+      min-height: 74px;
+    }
+     
+    /* 이름 + 발음 2줄 기준 */
+    .name { 
+      font-size: clamp(18px, 4.5vw, 22px);
+      font-weight: bold;
+      visibility: hidden;
+    }
+    
+    .pron {
+      font-size: clamp(18px, 4vw, 22px);
+      color: blue;
+      margin-top: 4px;
+      visibility: hidden;
+    }
+    
+    .controls {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    
+    button {
+      padding: 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    
+    .start {
+      background-color: #4b7bec;
+      color: white;
+    }
+    
+    .stop {
+      background-color: #eb3b5a;
+      color: white;
+    }
+    
+    select {
+      width: 100%;
+      margin-top: 14px;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+
+  
+<body>
+  <div class="card">
+    <h2 style="color: green;">헬라어</h2>
+    <h1 style="color: blue;">알파벳 공부</h1>
+    <br>
+    
+    <div class="letter" id="letter">Α ~ Ω</div>
+    <!-- 고정 높이 영역 -->
+    <div class="info">
+      <div class="name" id="name">알파 (alpha)</div>
+      <div class="pron" id="pron">[a (아)]</div>
+    </div>
+ 
+    <select id="speedSelect">
+      <option value="2000">속도: 보통 (2초)</option>
+      <option value="3000">속도: 느리게 (3초)</option>
+      <option value="4000">속도: 아주 느리게 (4초)</option>
+      <option value="5000">속도: 초보자 (5초)</option>
+    </select>
+    
+    <div class="controls">
+      <button class="start" onclick="start()">시작</button>
+      <button class="stop" onclick="stop()">중지</button>
+    </div>
+    
+    <br>
+
+    <p>
+      <a href="helleek_alphabet_all.html">헬라어 알파벳 전체 보기</a>
+    </p>
+    <p>
+      <a href="index.html">헬라어 공부 메인 페이지</a>
+    </p>
+  </div>
+  
+  
+<script>
+const greekLetters = [
+    { upper: "Α", lower: "α", name: "알파", latin: "alpha", pron: "a (아)" },
+    { upper: "Β", lower: "β", name: "베타", latin: "beta", pron: "b (ㅂ)" },
+    { upper: "Γ", lower: "γ", name: "감마", latin: "gamma", pron: "g (ㄱ)" },
+    { upper: "Δ", lower: "δ", name: "델타", latin: "delta", pron: "d (ㄷ)" },
+    { upper: "Ε", lower: "ε", name: "엡실론", latin: "epsilon", pron: "e (에)" },
+    { upper: "Ζ", lower: "ζ", name: "제타", latin: "zeta", pron: "z (ㅈ)" },
+    { upper: "Η", lower: "η", name: "에타", latin: "eta", pron: "ē (에)" },
+    { upper: "Θ", lower: "θ", name: "쎄타", latin: "theta", pron: "th (ㄸ/ㅆ)" },
+    { upper: "Ι", lower: "ι", name: "이오타", latin: "iota", pron: "i (이)" },
+    { upper: "Κ", lower: "κ", name: "카파", latin: "kappa", pron: "k (ㅋ)" },
+    { upper: "Λ", lower: "λ", name: "람다", latin: "lambda", pron: "l (ㄹ)" },
+    { upper: "Μ", lower: "μ", name: "뮈", latin: "mu", pron: "m (ㅁ)" },
+    { upper: "Ν", lower: "ν", name: "뉘", latin: "nu", pron: "n (ㄴ)" },
+    { upper: "Ξ", lower: "ξ", name: "크시", latin: "xi", pron: "ks (크스)" },
+    { upper: "Ο", lower: "ο", name: "오미크론", latin: "omicron", pron: "o (오)" },
+    { upper: "Π", lower: "π", name: "피", latin: "pi", pron: "p (ㅍ)" },
+    { upper: "Ρ", lower: "ρ", name: "로", latin: "rho", pron: "r (ㄹ)" },
+    { upper: "Σ", lower: "σ", name: "시그마", latin: "sigma", pron: "s (ㅅ)" },
+    { upper: "Τ", lower: "τ", name: "타우", latin: "tau", pron: "t (ㅌ)" },
+    { upper: "Υ", lower: "υ", name: "윕실론", latin: "upsilon", pron: "u (위)" },
+    { upper: "Φ", lower: "φ", name: "피", latin: "phi", pron: "ph (ㅍ)" },
+    { upper: "Χ", lower: "χ", name: "키", latin: "chi", pron: "ch (ㅋ)" },
+    { upper: "Ψ", lower: "ψ", name: "프시", latin: "psi", pron: "ps (프스)" },
+    { upper: "Ω", lower: "ω", name: "오메가", latin: "omega", pron: "ō (오)" }
+];
+
+let running = false;
+let timer1, timer2;
+
+let shuffledLetters = [];
+let currentIndex = 0;
+
+/* 배열 섞기 (Fisher–Yates Shuffle) */
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function cycle() {
+    if (!running) return;
+
+    const speed = parseInt(document.getElementById("speedSelect").value);
+
+    // 한 바퀴가 끝났으면 다시 섞기
+    if (currentIndex >= shuffledLetters.length) {
+        shuffledLetters = shuffleArray(greekLetters);
+        currentIndex = 0;
+    }
+
+    const current = shuffledLetters[currentIndex];
+    currentIndex++;
+
+    document.getElementById("letter").textContent =
+        `${current.upper} ${current.lower}`;
+
+    // 숨김
+    document.getElementById("name").style.visibility = "hidden";
+    document.getElementById("pron").style.visibility = "hidden";
+
+    timer1 = setTimeout(() => {
+        document.getElementById("name").textContent =
+            `${current.name} (${current.latin})`;
+        document.getElementById("pron").textContent =
+            `[${current.pron}]`;
+
+        document.getElementById("name").style.visibility = "visible";
+        document.getElementById("pron").style.visibility = "visible";
+    }, speed);
+
+    timer2 = setTimeout(cycle, speed * 2);
+}
+
+function start() {
+    stop();
+    shuffledLetters = shuffleArray(greekLetters); // 시작 시 한 번 섞기
+    currentIndex = 0;
+    running = true;
+    cycle();
+}
+
+function stop() {
+    running = false;
+    clearTimeout(timer1);
+    clearTimeout(timer2);
+}
+</script>
+
+
+</body>
+</html>
