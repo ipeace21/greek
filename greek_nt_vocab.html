@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:wght@400;700&display=swap" rel="stylesheet">
+
+<title>신약 헬라어 핵심 단어 학습</title>
+
+<style>
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #f5f6fa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        padding: 16px;
+    }
+
+    .card {
+        background: white;
+        width: 100%;
+        max-width: 420px;
+        padding: 22px;
+        border-radius: 18px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        text-align: center;
+    }
+
+    .greek-word {
+        font-family: 'Gentium Plus', serif;
+        font-size: 48px;
+        margin: 20px 0;
+        color: #222;
+        min-height: 64px;
+    }
+
+    .info {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+        min-height: 160px;
+        visibility: hidden;
+    }
+
+    .info div {
+        margin: 4px 0;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    button {
+        flex: 1;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .start-btn {
+        background: green;
+        color: white;
+    }
+
+    .next-btn {
+        background: #3867d6;
+        color: white;
+    }
+</style>
+</head>
+<body>
+
+<div class="card">
+    <h2>신약 헬라어 핵심 20단어</h2>
+
+    <div class="greek-word" id="greekWord">—</div>
+
+    <div class="info" id="infoBox">
+        <div id="pron"></div>
+        <div id="meaning"></div>
+        <div id="gender"></div>
+        <div id="cases"></div>
+    </div>
+
+    <div class="buttons">
+        <button class="start-btn" onclick="start()">시작</button>
+        <button class="next-btn" onclick="nextWord()">다음</button>
+    </div>
+</div>
+
+<script>
+const words = [
+  {
+    greek: "λόγος",
+    pron: "로고스",
+    meaning: "말씀",
+    gender: "남성",
+    cases: "λόγος / λόγου / λόγῳ / λόγον"
+  },
+  {
+    greek: "θεός",
+    pron: "데오스",
+    meaning: "하나님",
+    gender: "남성",
+    cases: "θεός / θεοῦ / θεῷ / θεόν"
+  },
+  {
+    greek: "κύριος",
+    pron: "퀴리오스",
+    meaning: "주님",
+    gender: "남성",
+    cases: "κύριος / κυρίου / κυρίῳ / κύριον"
+  },
+  {
+    greek: "Ἰησοῦς",
+    pron: "이에수스",
+    meaning: "예수",
+    gender: "남성",
+    cases: "Ἰησοῦς / Ἰησοῦ / Ἰησοῦ / Ἰησοῦν"
+  },
+  {
+    greek: "Χριστός",
+    pron: "크리스토스",
+    meaning: "그리스도",
+    gender: "남성",
+    cases: "Χριστός / Χριστοῦ / Χριστῷ / Χριστόν"
+  },
+  {
+    greek: "πίστις",
+    pron: "피스티스",
+    meaning: "믿음",
+    gender: "여성",
+    cases: "πίστις / πίστεως / πίστει / πίστιν"
+  },
+  {
+    greek: "ἀγάπη",
+    pron: "아가페",
+    meaning: "사랑",
+    gender: "여성",
+    cases: "ἀγάπη / ἀγάπης / ἀγάπῃ / ἀγάπην"
+  },
+  {
+    greek: "χάρις",
+    pron: "카리스",
+    meaning: "은혜",
+    gender: "여성",
+    cases: "χάρις / χάριτος / χάριτι / χάριν"
+  },
+  {
+    greek: "σωτηρία",
+    pron: "소테리아",
+    meaning: "구원",
+    gender: "여성",
+    cases: "σωτηρία / σωτηρίας / σωτηρίᾳ / σωτηρίαν"
+  },
+  {
+    greek: "ζωή",
+    pron: "조에",
+    meaning: "생명",
+    gender: "여성",
+    cases: "ζωή / ζωῆς / ζωῇ / ζωήν"
+  },
+  {
+    greek: "θάνατος",
+    pron: "타나토스",
+    meaning: "죽음",
+    gender: "남성",
+    cases: "θάνατος / θανάτου / θανάτῳ / θάνατον"
+  },
+  {
+    greek: "κόσμος",
+    pron: "코스모스",
+    meaning: "세상",
+    gender: "남성",
+    cases: "κόσμος / κόσμου / κόσμῳ / κόσμον"
+  },
+  {
+    greek: "ἄνθρωπος",
+    pron: "안트로포스",
+    meaning: "사람",
+    gender: "남성",
+    cases: "ἄνθρωπος / ἀνθρώπου / ἀνθρώπῳ / ἄνθρωπον"
+  },
+  {
+    greek: "καρδία",
+    pron: "카르디아",
+    meaning: "마음",
+    gender: "여성",
+    cases: "καρδία / καρδίας / καρδίᾳ / καρδίαν"
+  },
+  {
+    greek: "πνεῦμα",
+    pron: "프뉴마",
+    meaning: "영",
+    gender: "중성",
+    cases: "πνεῦμα / πνεύματος / πνεύματι / πνεῦμα"
+  },
+  {
+    greek: "νόμος",
+    pron: "노모스",
+    meaning: "율법",
+    gender: "남성",
+    cases: "νόμος / νόμου / νόμῳ / νόμον"
+  },
+  {
+    greek: "βασιλεία",
+    pron: "바실레이아",
+    meaning: "하나님 나라",
+    gender: "여성",
+    cases: "βασιλεία / βασιλείας / βασιλείᾳ / βασιλείαν"
+  },
+  {
+    greek: "μαθητής",
+    pron: "마데테스",
+    meaning: "제자",
+    gender: "남성",
+    cases: "μαθητής / μαθητοῦ / μαθητῇ / μαθητήν"
+  },
+  {
+    greek: "ἀλήθεια",
+    pron: "알레데이아",
+    meaning: "진리",
+    gender: "여성",
+    cases: "ἀλήθεια / ἀληθείας / ἀληθείᾳ / ἀλήθειαν"
+  },
+  {
+    greek: "ἁμαρτία",
+    pron: "하마르티아",
+    meaning: "죄",
+    gender: "여성",
+    cases: "ἁμαρτία / ἁμαρτίας / ἁμαρτίᾳ / ἁμαρτίαν"
+  }
+];
+
+let timer = null;
+
+function showWord() {
+    const w = words[Math.floor(Math.random() * words.length)];
+
+    document.getElementById("greekWord").textContent = w.greek;
+    document.getElementById("infoBox").style.visibility = "hidden";
+
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+        document.getElementById("pron").textContent = "발음: " + w.pron;
+        document.getElementById("meaning").textContent = "뜻: " + w.meaning;
+        document.getElementById("gender").textContent = "성: " + w.gender;
+        document.getElementById("cases").textContent = "격 변화: " + w.cases;
+        document.getElementById("infoBox").style.visibility = "visible";
+    }, 5000);
+}
+
+function start() {
+    showWord();
+}
+
+function nextWord() {
+    showWord();
+}
+</script>
+
+</body>
+</html>
